@@ -1,0 +1,2447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cropsy Studio Scripting Documentation</title>
+    <style>
+        :root {
+            --bg: #f3f5f7;
+            --page-text: #1c242d;
+            --panel: #22282f;
+            --text: #f4f7fb;
+            --text-soft: #c7d0da;
+            --line: #d9e0e7;
+            --accent: #4e9a76;
+            --warning: #f0bc65;
+            --danger: #e07c7c;
+            --type-float: #f0bc65;
+            --type-vec: #77c6ff;
+            --type-bool: #98d98e;
+            --type-string: #e5a2ff;
+            --type-void: #c8d0d8;
+            --type-id: #8fe0d4;
+            --type-int: #ff9f7a;
+            --type-runtime: #ff85b5;
+            --type-entity: #ffd77a;
+            --type-keyword: #a7dcff;
+            --type-parameter: #c59af5;
+            --type-command-select: #57d7c0;
+            --type-command-name: #ff99d6;
+            --type-command-output: #d978ff;
+            --type-command-transform: #63c8ff;
+            --type-command-color: #ffb14d;
+            --surface: #ffffff;
+            --surface-soft: #f8fafc;
+            --surface-soft-2: #f3f6f9;
+            --surface-code: #eef3f7;
+            --surface-code-line: #dbe3ea;
+            --callout: #f6faf8;
+            --callout-warning: #fff9ee;
+            --callout-danger: #fff3f3;
+            --nav-hover: #eef5f1;
+            --nav-hover-text: #295842;
+            --muted: #5c6a76;
+            --title: #24313b;
+            --nav-title: #25303a;
+            --nav-link: #334250;
+            --table-head: #f3f6f9;
+            --table-head-text: #2a3742;
+        }
+
+        body[data-theme="dark"] {
+            --bg: #171b20;
+            --page-text: #e6edf3;
+            --panel: #20262d;
+            --text: #f4f7fb;
+            --text-soft: #c8d2dc;
+            --line: #313a44;
+            --surface: #20262d;
+            --surface-soft: #262d35;
+            --surface-soft-2: #2b333c;
+            --surface-code: #2a323b;
+            --surface-code-line: #38424d;
+            --callout: #213129;
+            --callout-warning: #342d1d;
+            --callout-danger: #362425;
+            --nav-hover: #2a3830;
+            --nav-hover-text: #b9e0cd;
+            --muted: #aeb8c2;
+            --title: #eef3f7;
+            --nav-title: #e7edf3;
+            --nav-link: #d4dde6;
+            --table-head: #29313a;
+            --table-head-text: #eef3f7;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Segoe UI", "Trebuchet MS", sans-serif;
+            background: var(--bg);
+            color: var(--page-text);
+        }
+
+        .page {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 32px 24px 48px;
+        }
+
+        .hero {
+            background: #283039;
+            color: var(--text);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            position: relative;
+        }
+
+        .hero h1 {
+            margin: 0 0 10px;
+            font-size: 2rem;
+            letter-spacing: 0.02em;
+        }
+
+        .hero p {
+            margin: 0;
+            max-width: 760px;
+            color: var(--text-soft);
+            line-height: 1.6;
+        }
+
+        .notice {
+            margin-top: 16px;
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.08);
+            color: #dbe8df;
+            font-size: 0.92rem;
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text);
+            border-radius: 8px;
+            padding: 8px 12px;
+            cursor: pointer;
+            font: inherit;
+        }
+
+        .theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.14);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 280px minmax(0, 1fr);
+            gap: 22px;
+            align-items: start;
+        }
+
+        .nav,
+        .panel {
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: 12px;
+        }
+
+        .nav {
+            position: sticky;
+            top: 20px;
+            padding: 16px;
+        }
+
+        .nav h2 {
+            margin: 0 0 12px;
+            font-size: 1rem;
+            color: var(--nav-title);
+        }
+
+        .nav a {
+            display: block;
+            color: var(--nav-link);
+            text-decoration: none;
+            padding: 7px 9px;
+            border-radius: 8px;
+            margin-bottom: 6px;
+        }
+
+        .nav a:hover {
+            background: var(--nav-hover);
+            color: var(--nav-hover-text);
+        }
+
+        .content {
+            display: grid;
+            gap: 22px;
+        }
+
+        .panel {
+            padding: 20px;
+        }
+
+        .panel h2 {
+            margin-top: 0;
+            font-size: 1.3rem;
+            color: var(--title);
+        }
+
+        .panel p,
+        .panel li {
+            line-height: 1.6;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 14px;
+        }
+
+        .card {
+            background: var(--surface-soft);
+            border: 1px solid #e0e6ec;
+            border-radius: 10px;
+            padding: 14px;
+        }
+
+        .card h3 {
+            margin: 0 0 8px;
+            font-size: 1rem;
+        }
+
+        .api-table {
+            width: 100%;
+            border-collapse: collapse;
+            overflow: hidden;
+            border-radius: 10px;
+        }
+
+        .api-table th,
+        .api-table td {
+            text-align: left;
+            padding: 12px 14px;
+            border-bottom: 1px solid #dde4eb;
+            vertical-align: top;
+        }
+
+        .api-table th {
+            background: var(--table-head);
+            color: var(--table-head-text);
+        }
+
+        .api-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .api-table td {
+            color: var(--page-text);
+        }
+
+        .function-button {
+            font: inherit;
+            color: #1f5f49;
+            background: #eef7f2;
+            border: 1px solid #cfe4d8;
+            border-radius: 7px;
+            padding: 5px 9px;
+            cursor: pointer;
+        }
+
+        .function-button:hover {
+            background: #e3f1ea;
+        }
+
+        body[data-theme="dark"] .function-button {
+            color: #d4efe0;
+            background: #26392f;
+            border-color: #3e5d4e;
+        }
+
+        body[data-theme="dark"] .function-button:hover {
+            background: #2c4337;
+        }
+
+        .type {
+            display: inline-block;
+            padding: 3px 9px;
+            border-radius: 999px;
+            font-size: 0.84rem;
+            font-weight: 600;
+            letter-spacing: 0.01em;
+        }
+
+        .type-float { background: rgba(240, 188, 101, 0.18); color: #8b5a0d; }
+        .type-vec   { background: rgba(119, 198, 255, 0.18); color: #125a87; }
+        .type-bool  { background: rgba(152, 217, 142, 0.18); color: #2d6d2d; }
+        .type-string{ background: rgba(229, 162, 255, 0.18); color: #7b2fa6; }
+        .type-void  { background: rgba(200, 208, 216, 0.25); color: #4c5b68; }
+        .type-id    { background: rgba(143, 224, 212, 0.22); color: #15685f; }
+        .type-int   { background: rgba(255, 159, 122, 0.20); color: #9a4427; }
+
+        body[data-theme="dark"] .type-float { background: rgba(240, 188, 101, 0.18); color: #ffd487; }
+        body[data-theme="dark"] .type-vec { background: rgba(119, 198, 255, 0.18); color: #aee2ff; }
+        body[data-theme="dark"] .type-bool { background: rgba(152, 217, 142, 0.18); color: #bfe8b8; }
+        body[data-theme="dark"] .type-string { background: rgba(229, 162, 255, 0.18); color: #efc4ff; }
+        body[data-theme="dark"] .type-void { background: rgba(200, 208, 216, 0.20); color: #d7e0e7; }
+        body[data-theme="dark"] .type-id { background: rgba(143, 224, 212, 0.22); color: #bcf3eb; }
+        body[data-theme="dark"] .type-int { background: rgba(255, 159, 122, 0.18); color: #ffccb8; }
+
+        .type-token {
+            display: inline-block;
+            padding: 1px 6px;
+            border-radius: 6px;
+            font-weight: 600;
+            line-height: 1.3;
+            border: 1px solid transparent;
+        }
+
+        .type-token.type-float { background: rgba(240, 188, 101, 0.14); border-color: rgba(240, 188, 101, 0.24); color: #8b5a0d; }
+        .type-token.type-vec { background: rgba(119, 198, 255, 0.14); border-color: rgba(119, 198, 255, 0.24); color: #125a87; }
+        .type-token.type-bool { background: rgba(152, 217, 142, 0.14); border-color: rgba(152, 217, 142, 0.24); color: #2d6d2d; }
+        .type-token.type-string { background: rgba(229, 162, 255, 0.14); border-color: rgba(229, 162, 255, 0.24); color: #7b2fa6; }
+        .type-token.type-void { background: rgba(200, 208, 216, 0.18); border-color: rgba(200, 208, 216, 0.28); color: #4c5b68; }
+        .type-token.type-id { background: rgba(143, 224, 212, 0.16); border-color: rgba(143, 224, 212, 0.28); color: #15685f; }
+        .type-token.type-int { background: rgba(255, 159, 122, 0.16); border-color: rgba(255, 159, 122, 0.28); color: #9a4427; }
+        .type-token.type-runtime { background: rgba(255, 133, 181, 0.16); border-color: rgba(255, 133, 181, 0.28); color: #a83b72; }
+        .type-token.type-entity { background: rgba(255, 215, 122, 0.16); border-color: rgba(255, 215, 122, 0.28); color: #8f6112; }
+        .type-token.type-keyword { background: rgba(167, 220, 255, 0.16); border-color: rgba(167, 220, 255, 0.28); color: #2a6693; }
+        .type-token.type-parameter { background: rgba(197, 154, 245, 0.16); border-color: rgba(197, 154, 245, 0.28); color: #7440ab; }
+        .type-token.type-command-select { background: rgba(87, 215, 192, 0.14); border-color: rgba(87, 215, 192, 0.26); color: #187b69; }
+        .type-token.type-command-name { background: rgba(255, 153, 214, 0.14); border-color: rgba(255, 153, 214, 0.26); color: #9a3d74; }
+        .type-token.type-command-output { background: rgba(217, 120, 255, 0.14); border-color: rgba(217, 120, 255, 0.26); color: #7b2fa6; }
+        .type-token.type-command-transform { background: rgba(99, 200, 255, 0.14); border-color: rgba(99, 200, 255, 0.26); color: #125a87; }
+        .type-token.type-command-color { background: rgba(255, 177, 77, 0.14); border-color: rgba(255, 177, 77, 0.26); color: #9a5a10; }
+
+        body[data-theme="dark"] .type-token.type-float { background: rgba(240, 188, 101, 0.16); border-color: rgba(240, 188, 101, 0.28); color: #ffd487; }
+        body[data-theme="dark"] .type-token.type-vec { background: rgba(119, 198, 255, 0.16); border-color: rgba(119, 198, 255, 0.28); color: #aee2ff; }
+        body[data-theme="dark"] .type-token.type-bool { background: rgba(152, 217, 142, 0.16); border-color: rgba(152, 217, 142, 0.28); color: #bfe8b8; }
+        body[data-theme="dark"] .type-token.type-string { background: rgba(229, 162, 255, 0.16); border-color: rgba(229, 162, 255, 0.28); color: #efc4ff; }
+        body[data-theme="dark"] .type-token.type-void { background: rgba(200, 208, 216, 0.16); border-color: rgba(200, 208, 216, 0.26); color: #d7e0e7; }
+        body[data-theme="dark"] .type-token.type-id { background: rgba(143, 224, 212, 0.16); border-color: rgba(143, 224, 212, 0.28); color: #bcf3eb; }
+        body[data-theme="dark"] .type-token.type-int { background: rgba(255, 159, 122, 0.16); border-color: rgba(255, 159, 122, 0.28); color: #ffccb8; }
+        body[data-theme="dark"] .type-token.type-runtime { background: rgba(255, 133, 181, 0.16); border-color: rgba(255, 133, 181, 0.28); color: #ffc1dc; }
+        body[data-theme="dark"] .type-token.type-entity { background: rgba(255, 215, 122, 0.16); border-color: rgba(255, 215, 122, 0.28); color: #ffe4a6; }
+        body[data-theme="dark"] .type-token.type-keyword { background: rgba(167, 220, 255, 0.16); border-color: rgba(167, 220, 255, 0.28); color: #d2eeff; }
+        body[data-theme="dark"] .type-token.type-parameter { background: rgba(197, 154, 245, 0.16); border-color: rgba(197, 154, 245, 0.28); color: #e3c8ff; }
+        body[data-theme="dark"] .type-token.type-command-select { background: rgba(87, 215, 192, 0.16); border-color: rgba(87, 215, 192, 0.28); color: #baf2e8; }
+        body[data-theme="dark"] .type-token.type-command-name { background: rgba(255, 153, 214, 0.16); border-color: rgba(255, 153, 214, 0.28); color: #ffd0ea; }
+        body[data-theme="dark"] .type-token.type-command-output { background: rgba(217, 120, 255, 0.16); border-color: rgba(217, 120, 255, 0.28); color: #f0c4ff; }
+        body[data-theme="dark"] .type-token.type-command-transform { background: rgba(99, 200, 255, 0.16); border-color: rgba(99, 200, 255, 0.28); color: #bce9ff; }
+        body[data-theme="dark"] .type-token.type-command-color { background: rgba(255, 177, 77, 0.16); border-color: rgba(255, 177, 77, 0.28); color: #ffd7a0; }
+
+        .script-comment {
+            color: #79b56e;
+            font-style: italic;
+        }
+
+        .script-command.command-string {
+            color: #d978ff;
+            font-weight: 700;
+        }
+
+        .script-command.command-transform {
+            color: #63c8ff;
+            font-weight: 700;
+        }
+
+        .script-command.command-color {
+            color: #ffb14d;
+            font-weight: 700;
+        }
+
+        .script-command.command-generic {
+            color: #57d7c0;
+            font-weight: 700;
+        }
+
+        .script-command.command-select {
+            color: #57d7c0;
+            font-weight: 700;
+        }
+
+        .script-command.command-name {
+            color: #ff99d6;
+            font-weight: 700;
+        }
+
+        .script-string {
+            color: #d88cff;
+        }
+
+        .script-number {
+            color: #ffcd67;
+        }
+
+        .script-parameter {
+            color: #c59af5;
+            font-weight: 600;
+        }
+
+        .script-entity {
+            color: #ffd77a;
+            font-weight: 600;
+        }
+
+        .script-keyword {
+            color: #a7dcff;
+            font-weight: 600;
+        }
+
+        .script-runtime {
+            color: #ff85b5;
+            font-weight: 700;
+        }
+
+        body[data-theme="light"] .script-comment,
+        body[data-theme="light"] pre .script-comment,
+        body[data-theme="light"] code .script-comment {
+            color: #88c97a !important;
+        }
+
+        body[data-theme="light"] .script-command.command-string,
+        body[data-theme="light"] pre .script-command.command-string,
+        body[data-theme="light"] code .script-command.command-string {
+            color: #b34be8 !important;
+        }
+
+        body[data-theme="light"] .script-command.command-transform,
+        body[data-theme="light"] pre .script-command.command-transform,
+        body[data-theme="light"] code .script-command.command-transform {
+            color: #2aa9ea !important;
+        }
+
+        body[data-theme="light"] .script-command.command-color,
+        body[data-theme="light"] pre .script-command.command-color,
+        body[data-theme="light"] code .script-command.command-color {
+            color: #d8891d !important;
+        }
+
+        body[data-theme="light"] .script-command.command-generic,
+        body[data-theme="light"] pre .script-command.command-generic,
+        body[data-theme="light"] code .script-command.command-generic {
+            color: #28a994 !important;
+        }
+
+        body[data-theme="light"] .script-command.command-select,
+        body[data-theme="light"] pre .script-command.command-select,
+        body[data-theme="light"] code .script-command.command-select {
+            color: #28a994 !important;
+        }
+
+        body[data-theme="light"] .script-command.command-name,
+        body[data-theme="light"] pre .script-command.command-name,
+        body[data-theme="light"] code .script-command.command-name {
+            color: #d16ca9 !important;
+        }
+
+        body[data-theme="light"] .script-string,
+        body[data-theme="light"] pre .script-string,
+        body[data-theme="light"] code .script-string {
+            color: #c060f0 !important;
+        }
+
+        body[data-theme="light"] .script-number,
+        body[data-theme="light"] pre .script-number,
+        body[data-theme="light"] code .script-number {
+            color: #e0a132 !important;
+        }
+
+        body[data-theme="light"] .script-parameter,
+        body[data-theme="light"] pre .script-parameter,
+        body[data-theme="light"] code .script-parameter {
+            color: #a45ad8 !important;
+        }
+
+        body[data-theme="light"] .script-entity,
+        body[data-theme="light"] pre .script-entity,
+        body[data-theme="light"] code .script-entity {
+            color: #c98b1d !important;
+        }
+
+        body[data-theme="light"] .script-keyword,
+        body[data-theme="light"] pre .script-keyword,
+        body[data-theme="light"] code .script-keyword {
+            color: #458ec2 !important;
+        }
+
+        body[data-theme="light"] .script-runtime,
+        body[data-theme="light"] pre .script-runtime,
+        body[data-theme="light"] code .script-runtime {
+            color: #d2558d !important;
+        }
+
+        pre {
+            margin: 0;
+            overflow-x: auto;
+            background: var(--panel);
+            color: var(--text);
+            padding: 16px;
+            border-radius: 10px;
+            border: 1px solid #313942;
+            line-height: 1.55;
+        }
+
+        code {
+            font-family: Consolas, "Cascadia Code", monospace;
+            font-size: 0.95rem;
+        }
+
+        .inline-code {
+            background: var(--surface-code);
+            border: 1px solid var(--surface-code-line);
+            padding: 1px 6px;
+            border-radius: 6px;
+            color: #273543;
+        }
+
+        body[data-theme="dark"] .inline-code {
+            background: #2b333d;
+            border-color: #404b57;
+            color: #e7eef5;
+        }
+
+        .hero .inline-code {
+            color: #d8e1e8;
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.14);
+        }
+
+        .callout {
+            border-left: 4px solid var(--accent);
+            background: var(--callout);
+            padding: 12px 14px;
+            border-radius: 8px;
+        }
+
+        .warning {
+            border-left-color: var(--warning);
+            background: var(--callout-warning);
+        }
+
+        .danger {
+            border-left-color: var(--danger);
+            background: var(--callout-danger);
+        }
+
+        .small {
+            color: var(--muted);
+            font-size: 0.92rem;
+        }
+
+        .function-popup {
+            position: fixed;
+            right: 24px;
+            bottom: 24px;
+            width: 420px;
+            min-width: 280px;
+            min-height: 200px;
+            max-width: min(90vw, 640px);
+            max-height: 78vh;
+            resize: both;
+            overflow: auto;
+            display: none;
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            box-shadow: 0 16px 34px rgba(0, 0, 0, 0.18);
+            z-index: 1000;
+        }
+
+        .function-popup.open {
+            display: block;
+        }
+
+        .function-popup-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--line);
+            background: var(--surface-soft);
+            border-radius: 12px 12px 0 0;
+            position: sticky;
+            top: 0;
+            cursor: move;
+            user-select: none;
+        }
+
+        .function-popup-title {
+            margin: 0;
+            font-size: 1rem;
+            color: var(--title);
+        }
+
+        .popup-type-note {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--muted);
+        }
+
+        .function-popup-subtitle {
+            margin: 4px 0 0;
+            font-size: 0.88rem;
+            color: var(--muted);
+        }
+
+        .function-popup-close {
+            font: inherit;
+            border: 1px solid var(--line);
+            background: var(--surface);
+            color: var(--page-text);
+            border-radius: 8px;
+            width: 32px;
+            height: 32px;
+            cursor: pointer;
+        }
+
+        .function-popup-body {
+            padding: 16px;
+        }
+
+        .hover-doc-trigger {
+            cursor: help;
+        }
+
+        .hover-doc-card {
+            position: fixed;
+            width: 380px;
+            max-width: min(92vw, 420px);
+            display: none;
+            background: var(--surface);
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            box-shadow: 0 14px 28px rgba(0, 0, 0, 0.18);
+            padding: 14px 16px;
+            z-index: 1100;
+            pointer-events: none;
+        }
+
+        .hover-doc-card.open {
+            display: block;
+        }
+
+        .hover-doc-card h4 {
+            margin: 0 0 8px;
+            color: var(--title);
+            font-size: 1rem;
+        }
+
+        .hover-doc-card p,
+        .hover-doc-card li {
+            margin: 0;
+            line-height: 1.55;
+        }
+
+        .hover-doc-card ul {
+            margin: 8px 0 0;
+            padding-left: 18px;
+        }
+
+        .hover-doc-card .small-label {
+            display: block;
+            margin-top: 10px;
+            margin-bottom: 4px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: var(--muted);
+        }
+
+        #hoverDocExample pre {
+            margin: 0;
+            max-width: 100%;
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding: 12px;
+        }
+
+        #hoverDocExample code {
+            white-space: pre;
+        }
+
+        .function-popup .type-token,
+        .hover-doc-card .type-token {
+            display: inline;
+            padding: 0;
+            border: none !important;
+            border-radius: 0;
+            background: transparent !important;
+            box-shadow: none;
+            font-weight: 700;
+        }
+
+        .function-popup .doc-function,
+        .hover-doc-card .doc-function {
+            color: #2b7fff;
+            font-weight: 700;
+        }
+
+        .function-popup .doc-keyword,
+        .hover-doc-card .doc-keyword {
+            color: #6d72d9;
+            font-weight: 700;
+        }
+
+        .function-popup .doc-member,
+        .hover-doc-card .doc-member {
+            color: #2aa894;
+            font-weight: 600;
+        }
+
+        .function-popup .type-token.type-float,
+        .hover-doc-card .type-token.type-float {
+            color: #d99112;
+        }
+
+        .function-popup .type-token.type-vec,
+        .hover-doc-card .type-token.type-vec {
+            color: #1b8ed2;
+        }
+
+        .function-popup .type-token.type-bool,
+        .hover-doc-card .type-token.type-bool {
+            color: #2f9d48;
+        }
+
+        .function-popup .type-token.type-string,
+        .hover-doc-card .type-token.type-string {
+            color: #b145ea;
+        }
+
+        .function-popup .type-token.type-void,
+        .hover-doc-card .type-token.type-void {
+            color: #6a7a8a;
+        }
+
+        .function-popup .type-token.type-id,
+        .hover-doc-card .type-token.type-id {
+            color: #119f97;
+        }
+
+        .function-popup .type-token.type-int,
+        .hover-doc-card .type-token.type-int {
+            color: #d66b39;
+        }
+
+        .function-popup .type-token.type-runtime,
+        .hover-doc-card .type-token.type-runtime {
+            color: #dd4d8a;
+        }
+
+        .function-popup .type-token.type-entity,
+        .hover-doc-card .type-token.type-entity {
+            color: #b07b10;
+        }
+
+        .function-popup .type-token.type-keyword,
+        .hover-doc-card .type-token.type-keyword {
+            color: #317fbc;
+        }
+
+        .function-popup .type-token.type-parameter,
+        .hover-doc-card .type-token.type-parameter {
+            color: #8f52d9;
+        }
+
+        .function-popup .type-token.type-command-select,
+        .hover-doc-card .type-token.type-command-select {
+            color: #119b86;
+        }
+
+        .function-popup .type-token.type-command-name,
+        .hover-doc-card .type-token.type-command-name {
+            color: #d4559a;
+        }
+
+        .function-popup .type-token.type-command-output,
+        .hover-doc-card .type-token.type-command-output {
+            color: #b04de1;
+        }
+
+        .function-popup .type-token.type-command-transform,
+        .hover-doc-card .type-token.type-command-transform {
+            color: #1f95e2;
+        }
+
+        .function-popup .type-token.type-command-color,
+        .hover-doc-card .type-token.type-command-color {
+            color: #dd8a14;
+        }
+
+        body[data-theme="dark"] .function-popup .doc-function,
+        body[data-theme="dark"] .hover-doc-card .doc-function {
+            color: #79b7ff;
+        }
+
+        body[data-theme="dark"] .function-popup .doc-keyword,
+        body[data-theme="dark"] .hover-doc-card .doc-keyword {
+            color: #b4bbff;
+        }
+
+        body[data-theme="dark"] .function-popup .doc-member,
+        body[data-theme="dark"] .hover-doc-card .doc-member {
+            color: #7ee8d4;
+        }
+
+        body[data-theme="dark"] .function-popup .type-token.type-float,
+        body[data-theme="dark"] .hover-doc-card .type-token.type-float {
+            color: #ffd27a;
+        }
+
+        body[data-theme="dark"] .function-popup .type-token.type-vec,
+        body[data-theme="dark"] .hover-doc-card .type-token.type-vec {
+            color: #98dcff;
+        }
+
+        body[data-theme="dark"] .function-popup .type-token.type-bool,
+        body[data-theme="dark"] .hover-doc-card .type-token.type-bool {
+            color: #b9f28a;
+        }
+
+        body[data-theme="dark"] .function-popup .type-token.type-string,
+        body[data-theme="dark"] .hover-doc-card .type-token.type-string {
+            color: #ecb8ff;
+        }
+
+        body[data-theme="dark"] .function-popup .type-token.type-void,
+        body[data-theme="dark"] .hover-doc-card .type-token.type-void {
+            color: #d4dee7;
+        }
+
+        body[data-theme="dark"] .function-popup .type-token.type-id,
+        body[data-theme="dark"] .hover-doc-card .type-token.type-id {
+            color: #9df4ea;
+        }
+
+        body[data-theme="dark"] .function-popup .type-token.type-int,
+        body[data-theme="dark"] .hover-doc-card .type-token.type-int {
+            color: #ffb992;
+        }
+
+        body[data-theme="dark"] .function-popup .type-token.type-runtime,
+        body[data-theme="dark"] .hover-doc-card .type-token.type-runtime {
+            color: #ff9ac0;
+        }
+
+        body[data-theme="dark"] .function-popup .type-token.type-entity,
+        body[data-theme="dark"] .hover-doc-card .type-token.type-entity {
+            color: #ffd88e;
+        }
+
+        body[data-theme="dark"] .function-popup .type-token.type-keyword,
+        body[data-theme="dark"] .hover-doc-card .type-token.type-keyword {
+            color: #c4ebff;
+        }
+
+        body[data-theme="dark"] .function-popup .type-token.type-parameter,
+        body[data-theme="dark"] .hover-doc-card .type-token.type-parameter {
+            color: #ddb5ff;
+        }
+
+        body[data-theme="dark"] .function-popup .type-token.type-command-select,
+        body[data-theme="dark"] .hover-doc-card .type-token.type-command-select {
+            color: #aaf4e6;
+        }
+
+        body[data-theme="dark"] .function-popup .type-token.type-command-name,
+        body[data-theme="dark"] .hover-doc-card .type-token.type-command-name {
+            color: #ffc1e3;
+        }
+
+        body[data-theme="dark"] .function-popup .type-token.type-command-output,
+        body[data-theme="dark"] .hover-doc-card .type-token.type-command-output {
+            color: #e8bbff;
+        }
+
+        body[data-theme="dark"] .function-popup .type-token.type-command-transform,
+        body[data-theme="dark"] .hover-doc-card .type-token.type-command-transform {
+            color: #9cddff;
+        }
+
+        body[data-theme="dark"] .function-popup .type-token.type-command-color,
+        body[data-theme="dark"] .hover-doc-card .type-token.type-command-color {
+            color: #ffd086;
+        }
+
+        .resize-handle {
+            position: absolute;
+            z-index: 1001;
+        }
+
+        .resize-handle.n,
+        .resize-handle.s {
+            left: 10px;
+            right: 10px;
+            height: 8px;
+        }
+
+        .resize-handle.e,
+        .resize-handle.w {
+            top: 10px;
+            bottom: 10px;
+            width: 8px;
+        }
+
+        .resize-handle.n { top: -4px; cursor: ns-resize; }
+        .resize-handle.s { bottom: -4px; cursor: ns-resize; }
+        .resize-handle.e { right: -4px; cursor: ew-resize; }
+        .resize-handle.w { left: -4px; cursor: ew-resize; }
+
+        .resize-handle.ne,
+        .resize-handle.nw,
+        .resize-handle.se,
+        .resize-handle.sw {
+            width: 12px;
+            height: 12px;
+        }
+
+        .resize-handle.ne { top: -4px; right: -4px; cursor: nesw-resize; }
+        .resize-handle.nw { top: -4px; left: -4px; cursor: nwse-resize; }
+        .resize-handle.se { bottom: -4px; right: -4px; cursor: nwse-resize; }
+        .resize-handle.sw { bottom: -4px; left: -4px; cursor: nesw-resize; }
+
+        .function-popup-body h4 {
+            margin: 0 0 8px;
+            color: var(--title);
+        }
+
+        .function-popup-body p,
+        .function-popup-body li {
+            line-height: 1.6;
+        }
+
+        .function-meta {
+            display: grid;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+
+        .function-example {
+            margin-top: 14px;
+        }
+
+        @media (max-width: 940px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav {
+                position: static;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <header class="hero">
+            <button id="themeToggle" class="theme-toggle" type="button">Dark Mode</button>
+            <h1>Cropsy Studio Scripting Documentation</h1>
+            <p>
+                This page explains the current beginner-friendly scripting systems in Cropsy Studio.
+                Right now there are two scripting paths: the <strong>command script</strong> system used by
+                <span class="inline-code">.crop</span> files, and the new <strong>built-in behavior</strong> system used in play mode.
+            </p>
+            <div class="notice">Simple on purpose: small API, easy names, safe starting point.</div>
+        </header>
+
+        <div class="grid">
+            <aside class="nav">
+                <h2>Contents</h2>
+                <a href="#overview">Overview</a>
+                <a href="#quick-start">Quick Start</a>
+                <a href="#beginner-roadmap">Beginner Roadmap</a>
+                <a href="#types">Value Types</a>
+                <a href="#command-scripts">Command Scripts</a>
+                <a href="#commands">Supported Commands</a>
+                <a href="#examples">Examples</a>
+                <a href="#behaviors">Built-in Behaviors</a>
+                <a href="#behavior-api">Behavior API</a>
+                <a href="#mistakes">Common Mistakes</a>
+                <a href="#debugging">Debugging Tips</a>
+                <a href="#practice">Practice Ideas</a>
+                <a href="#limits">Current Limits</a>
+            </aside>
+
+            <main class="content">
+                <section class="panel" id="overview">
+                    <h2>Overview</h2>
+                    <div class="cards">
+                        <div class="card">
+                            <h3>Command Script</h3>
+                            <p class="small">
+                                Text-based <span class="inline-code">.crop</span> scripts that run simple scene commands like moving,
+                                rotating, scaling, printing, and renaming.
+                            </p>
+                        </div>
+                        <div class="card">
+                            <h3>Behavior System</h3>
+                            <p class="small">
+                                Built-in C++ behaviors that run in play mode with <span class="inline-code">OnStart()</span> and
+                                <span class="inline-code">OnUpdate(deltaTime)</span>.
+                            </p>
+                        </div>
+                        <div class="card">
+                            <h3>Best Use Right Now</h3>
+                            <p class="small">
+                                Use command scripts for quick scene edits. Use behaviors for repeatable runtime logic.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="panel" id="quick-start">
+                    <h2>Quick Start For Beginners</h2>
+                    <ol>
+                        <li>Create or select a simple object like a cube.</li>
+                        <li>Open the Script Editor.</li>
+                        <li>Write a tiny command script first, not a complicated one.</li>
+                        <li>Use <span class="inline-code">Debug</span> before you use <span class="inline-code">Run</span>.</li>
+                        <li>Watch the Console after every test.</li>
+                    </ol>
+                    <div class="callout">
+                        Best first goal: make one object move, rotate, or rename itself successfully. Small wins help a lot more than giant scripts.
+                    </div>
+                    <pre><code># Good first script
+print Hello from Cropsy
+select Cube
+move 0 1 0</code></pre>
+                </section>
+
+                <section class="panel" id="beginner-roadmap">
+                    <h2>Beginner Roadmap</h2>
+                    <div class="cards">
+                        <div class="card">
+                            <h3>Step 1</h3>
+                            <p class="small">Learn names and selection. Make sure you understand what object your script is changing.</p>
+                        </div>
+                        <div class="card">
+                            <h3>Step 2</h3>
+                            <p class="small">Practice <span class="inline-code">move</span>, <span class="inline-code">rotate</span>, and <span class="inline-code">set_color</span>.</p>
+                        </div>
+                        <div class="card">
+                            <h3>Step 3</h3>
+                            <p class="small">Start using behavior hooks like <span class="inline-code">SpinBehavior</span> in play mode.</p>
+                        </div>
+                    </div>
+                    <p>
+                        If you are new, learn in this order:
+                        <strong>selection</strong>,
+                        <strong>position</strong>,
+                        <strong>rotation</strong>,
+                        <strong>scale</strong>,
+                        <strong>color</strong>,
+                        then
+                        <strong>behaviors</strong>.
+                    </p>
+                </section>
+
+                <section class="panel" id="types">
+                    <h2>Value Types</h2>
+                    <table class="api-table">
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>What It Means</th>
+                                <th>Example</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="type type-id hover-doc-trigger" data-hover-doc="type-entityid">EntityId</span></td>
+                                <td>Internal entity handle used by the engine.</td>
+                                <td><code>42</code></td>
+                            </tr>
+                            <tr>
+                                <td><span class="type type-string hover-doc-trigger" data-hover-doc="type-string">string</span></td>
+                                <td>Text or a name.</td>
+                                <td><code>Player</code></td>
+                            </tr>
+                            <tr>
+                                <td><span class="type type-bool hover-doc-trigger" data-hover-doc="type-bool">bool</span></td>
+                                <td>True or false value.</td>
+                                <td><code>true</code></td>
+                            </tr>
+                            <tr>
+                                <td><span class="type type-vec hover-doc-trigger" data-hover-doc="type-vec4">vec4</span></td>
+                                <td>Four numbers, usually color RGBA.</td>
+                                <td><code>1 1 1 1</code></td>
+                            </tr>
+                            <tr>
+                                <td><span class="type type-vec hover-doc-trigger" data-hover-doc="type-vec3">vec3</span></td>
+                                <td>Three numbers, usually X Y Z.</td>
+                                <td><code>0 5 -2</code></td>
+                            </tr>
+                            <tr>
+                                <td><span class="type type-float hover-doc-trigger" data-hover-doc="type-float">float</span></td>
+                                <td>A single decimal number.</td>
+                                <td><code>1.5</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <section class="panel" id="script-colors">
+                    <h2>Script Color Meaning</h2>
+                    <table class="api-table">
+                        <thead>
+                            <tr>
+                                <th>Color Group</th>
+                                <th>What It Marks</th>
+                                <th>Example</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="type-token type-command-transform hover-doc-trigger" data-hover-doc="color-transform">Transform Command</span></td>
+                                <td>Movement, rotation, and scale commands.</td>
+                                <td><code>move</code>, <code>rotate</code>, <code>set_scale</code></td>
+                            </tr>
+                            <tr>
+                                <td><span class="type-token type-command-output hover-doc-trigger" data-hover-doc="color-output">Output Command</span></td>
+                                <td>Console output commands.</td>
+                                <td><code>print</code>, <code>warn</code>, <code>error</code></td>
+                            </tr>
+                            <tr>
+                                <td><span class="type-token type-command-color hover-doc-trigger" data-hover-doc="color-color">Color Command</span></td>
+                                <td>Commands that change mesh color.</td>
+                                <td><code>set_color</code></td>
+                            </tr>
+                            <tr>
+                                <td><span class="type-token type-command-select hover-doc-trigger" data-hover-doc="color-select">Selection Command</span></td>
+                                <td>Commands that pick the active object target.</td>
+                                  <td><code class="hover-doc-trigger" data-hover-doc="command-select">select</code></td>
+                            </tr>
+                            <tr>
+                                <td><span class="type-token type-command-name hover-doc-trigger" data-hover-doc="color-name">Name Command</span></td>
+                                <td>Commands that change object names.</td>
+                                <td><code>set_name</code></td>
+                            </tr>
+                            <tr>
+                                <td><span class="type-token type-parameter hover-doc-trigger" data-hover-doc="color-parameter">Parameter</span></td>
+                                <td>Script slot values exposed as <code>$name</code>.</td>
+                                <td><code>$speed</code></td>
+                            </tr>
+                            <tr>
+                                <td><span class="type-token type-entity hover-doc-trigger" data-hover-doc="color-entity">Entity Name</span></td>
+                                <td>Known scene object names used in scripts.</td>
+                                <td><code>Cube</code></td>
+                            </tr>
+                            <tr>
+                                <td><span class="type-token type-keyword hover-doc-trigger" data-hover-doc="color-keyword">Keyword</span></td>
+                                <td>Special built-in script words.</td>
+                                <td><code>selected</code></td>
+                            </tr>
+                            <tr>
+                                <td><span class="type-token type-runtime hover-doc-trigger" data-hover-doc="color-runtime">Runtime Token</span></td>
+                                <td>Special per-frame runtime values.</td>
+                                <td><code>dt</code></td>
+                            </tr>
+                            <tr>
+                                <td><span class="type-token type-bool hover-doc-trigger" data-hover-doc="color-bool">Boolean</span></td>
+                                <td>True/false values inside examples and docs.</td>
+                                <td><code>true</code>, <code>false</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <section class="panel" id="command-scripts">
+                    <h2>Command Script Basics</h2>
+                    <p>
+                        Command scripts are saved as <span class="inline-code">.crop</span> files. They are line-based.
+                        Each line is a command. Empty lines are ignored. Comment lines starting with
+                        <span class="inline-code">#</span> are ignored too.
+                    </p>
+                    <div class="callout">
+                        A command script does not expose the whole engine. It only supports a small set of safe commands.
+                    </div>
+                    <pre><code># This is a comment
+print Hello from Cropsy
+select Cube
+move 0 2 0
+rotate 0 25 0
+set_color 1 0.4 0.2 1</code></pre>
+                </section>
+
+                <section class="panel" id="commands">
+                    <h2>Supported Commands</h2>
+                    <table class="api-table">
+                        <thead>
+                            <tr>
+                                <th>Command</th>
+                                <th>Arguments</th>
+                                <th>What It Does</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>select</code></td>
+                                <td><span class="type type-string">string</span></td>
+                                <td>Selects a target entity by name. You can also use <code>selected</code> to keep the current one.</td>
+                            </tr>
+                            <tr>
+                                  <td><code class="hover-doc-trigger" data-hover-doc="command-print">print</code></td>
+                                <td><span class="type type-string">string</span></td>
+                                <td>Writes an info message to the console.</td>
+                            </tr>
+                            <tr>
+                                  <td><code class="hover-doc-trigger" data-hover-doc="command-warn">warn</code></td>
+                                <td><span class="type type-string">string</span></td>
+                                <td>Writes a warning message to the console.</td>
+                            </tr>
+                            <tr>
+                                  <td><code class="hover-doc-trigger" data-hover-doc="command-error">error</code></td>
+                                <td><span class="type type-string">string</span></td>
+                                <td>Writes an error message to the console.</td>
+                            </tr>
+                            <tr>
+                                  <td><code class="hover-doc-trigger" data-hover-doc="command-set-position">set_position</code></td>
+                                <td><span class="type type-vec">vec3</span></td>
+                                <td>Sets the selected entity position directly.</td>
+                            </tr>
+                            <tr>
+                                  <td><code class="hover-doc-trigger" data-hover-doc="command-move">move</code></td>
+                                <td><span class="type type-vec">vec3</span></td>
+                                <td>Adds the vector to the current position.</td>
+                            </tr>
+                            <tr>
+                                  <td><code class="hover-doc-trigger" data-hover-doc="command-set-rotation">set_rotation</code></td>
+                                <td><span class="type type-vec">vec3</span></td>
+                                <td>Sets Euler rotation directly.</td>
+                            </tr>
+                            <tr>
+                                  <td><code class="hover-doc-trigger" data-hover-doc="command-rotate">rotate</code></td>
+                                <td><span class="type type-vec">vec3</span></td>
+                                <td>Adds to the current Euler rotation.</td>
+                            </tr>
+                            <tr>
+                                  <td><code class="hover-doc-trigger" data-hover-doc="command-set-scale">set_scale</code></td>
+                                <td><span class="type type-vec">vec3</span></td>
+                                <td>Sets scale directly. Very small values are clamped so scale does not become zero.</td>
+                            </tr>
+                            <tr>
+                                  <td><code class="hover-doc-trigger" data-hover-doc="command-scale">scale</code></td>
+                                <td><span class="type type-vec">vec3</span></td>
+                                <td>Multiplies the current scale by the given vector.</td>
+                            </tr>
+                            <tr>
+                                  <td><code class="hover-doc-trigger" data-hover-doc="command-set-color">set_color</code></td>
+                                <td><span class="type type-vec">vec4</span> or <span class="type type-vec">vec3</span></td>
+                                <td>Sets mesh tint color. Works only on entities with a mesh component.</td>
+                            </tr>
+                            <tr>
+                                  <td><code class="hover-doc-trigger" data-hover-doc="command-set-name">set_name</code></td>
+                                <td><span class="type type-string">string</span></td>
+                                <td>Renames the current target entity.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <section class="panel" id="examples">
+                    <h2>Examples</h2>
+                    <h3>Move a cube upward</h3>
+                    <pre><code>select Cube
+move 0 3 0</code></pre>
+
+                    <h3>Rotate a light</h3>
+                    <pre><code>select Light
+rotate 0 45 0</code></pre>
+
+                    <h3>Set a sphere to bright orange</h3>
+                    <pre><code>select Sphere
+set_color 1 0.45 0.15 1</code></pre>
+
+                    <h3>Rename the selected object</h3>
+                    <pre><code>set_name MyCrate</code></pre>
+
+                    <h3>Make something spin slowly</h3>
+                    <pre><code>select Cube
+rotate 0 15 0</code></pre>
+
+                    <h3>Set a direct position instead of adding movement</h3>
+                    <pre><code>select Cube
+set_position 0 5 0</code></pre>
+
+                    <h3>Scale an object up a little</h3>
+                    <pre><code>select Cube
+scale 1.1 1.1 1.1</code></pre>
+                </section>
+
+                <section class="panel" id="behaviors">
+                    <h2>Built-in Behaviors</h2>
+                    <p>
+                        Behaviors are different from command scripts. They run during play mode and update every frame.
+                        Right now the system is intentionally small.
+                    </p>
+                    <table class="api-table">
+                        <thead>
+                            <tr>
+                                <th>Behavior Name</th>
+                                <th>What It Does</th>
+                                <th>Where To Use It</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>SpinBehavior</code></td>
+                                <td>Rotates the object around the Y axis over time.</td>
+                                <td>Set <span class="inline-code">Behavior Name</span> in the Inspector.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="callout warning">
+                        Unknown behavior names are ignored safely. They do not crash the engine, but they also do nothing.
+                    </div>
+                </section>
+
+                <section class="panel" id="behavior-api">
+                    <h2>Behavior API</h2>
+                    <p>
+                        This is the beginner-friendly API currently exposed by the base <span class="inline-code">Behavior</span> class.
+                    </p>
+                    <table class="api-table">
+                        <thead>
+                            <tr>
+                                <th>Function</th>
+                                <th>Return Type</th>
+                                <th>What It Does</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><button class="function-button" data-function="FindChild" type="button">FindChild(name)</button></td>
+                                <td><span class="type type-id">EntityId</span></td>
+                                <td>Finds a direct child by name.</td>
+                            </tr>
+                            <tr>
+                                <td><button class="function-button" data-function="IsEnabled" type="button">IsEnabled()</button></td>
+                                <td><span class="type type-bool">bool</span></td>
+                                <td>Checks whether the behavior component is enabled.</td>
+                            </tr>
+                            <tr>
+                                <td><button class="function-button" data-function="GetName" type="button">GetName()</button></td>
+                                <td><span class="type type-string">string</span></td>
+                                <td>Gets the entity name.</td>
+                            </tr>
+                            <tr>
+                                <td><button class="function-button" data-function="GetPosition" type="button">GetPosition()</button></td>
+                                <td><span class="type type-vec">vec3</span></td>
+                                <td>Gets local position.</td>
+                            </tr>
+                            <tr>
+                                <td><button class="function-button" data-function="GetRotation" type="button">GetRotation()</button></td>
+                                <td><span class="type type-vec">vec3</span></td>
+                                <td>Gets local Euler rotation.</td>
+                            </tr>
+                            <tr>
+                                <td><button class="function-button" data-function="GetScale" type="button">GetScale()</button></td>
+                                <td><span class="type type-vec">vec3</span></td>
+                                <td>Gets local scale.</td>
+                            </tr>
+                            <tr>
+                                <td><button class="function-button" data-function="OnStart" type="button">OnStart()</button></td>
+                                <td><span class="type type-void">void</span></td>
+                                <td>Runs once when play mode starts.</td>
+                            </tr>
+                            <tr>
+                                <td><button class="function-button" data-function="OnUpdate" type="button">OnUpdate(float deltaTime)</button></td>
+                                <td><span class="type type-void">void</span></td>
+                                <td>Runs every frame during play mode.</td>
+                            </tr>
+                            <tr>
+                                <td><button class="function-button" data-function="SetName" type="button">SetName(value)</button></td>
+                                <td><span class="type type-void">void</span></td>
+                                <td>Changes the entity name.</td>
+                            </tr>
+                            <tr>
+                                <td><button class="function-button" data-function="SetPosition" type="button">SetPosition(value)</button></td>
+                                <td><span class="type type-void">void</span></td>
+                                <td>Sets local position.</td>
+                            </tr>
+                            <tr>
+                                <td><button class="function-button" data-function="SetRotation" type="button">SetRotation(value)</button></td>
+                                <td><span class="type type-void">void</span></td>
+                                <td>Sets local Euler rotation.</td>
+                            </tr>
+                            <tr>
+                                <td><button class="function-button" data-function="SetScale" type="button">SetScale(value)</button></td>
+                                <td><span class="type type-void">void</span></td>
+                                <td>Sets local scale.</td>
+                            </tr>
+                            <tr>
+                                <td><button class="function-button" data-function="SetEnabled" type="button">SetEnabled(enabled)</button></td>
+                                <td><span class="type type-void">void</span></td>
+                                <td>Turns the behavior component on or off.</td>
+                            </tr>
+                            <tr>
+                                <td><button class="function-button" data-function="Print" type="button">Print(message)</button></td>
+                                <td><span class="type type-void">void</span></td>
+                                <td>Writes a message to the Cropsy console.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3>Example Behavior</h3>
+                    <pre><code>class SpinBehavior : public Behavior
+{
+public:
+    void OnUpdate(float deltaTime) override
+    {
+        glm::vec3 rotation = GetRotation();
+        rotation.y += 60.0f * deltaTime;
+        SetRotation(rotation);
+    }
+};</code></pre>
+                </section>
+
+                <section class="panel" id="limits">
+                    <h2>Common Mistakes</h2>
+                    <table class="api-table" id="mistakes">
+                        <thead>
+                            <tr>
+                                <th>Mistake</th>
+                                <th>Why It Happens</th>
+                                <th>Better Approach</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Forgetting to select a target</td>
+                                <td>The script does not know what object to edit.</td>
+                                <td>Use <span class="inline-code">select Cube</span> first.</td>
+                            </tr>
+                            <tr>
+                                <td>Using the wrong object name</td>
+                                <td>The name in the hierarchy does not match the script text.</td>
+                                <td>Copy the exact name from the hierarchy.</td>
+                            </tr>
+                            <tr>
+                                <td>Mixing up <span class="inline-code">move</span> and <span class="inline-code">set_position</span></td>
+                                <td>One adds movement, the other replaces the full position.</td>
+                                <td>Use <span class="inline-code">move</span> for offsets and <span class="inline-code">set_position</span> for exact placement.</td>
+                            </tr>
+                            <tr>
+                                <td>Typing too much before testing</td>
+                                <td>Big scripts are harder to debug.</td>
+                                <td>Run tiny changes often.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <section class="panel" id="debugging">
+                    <h2>Debugging Tips</h2>
+                    <ul>
+                        <li>Use <span class="inline-code">print</span> often while learning.</li>
+                        <li>Use the <span class="inline-code">Debug</span> button before <span class="inline-code">Run</span> if you are unsure.</li>
+                        <li>If a command does nothing, check the object name first.</li>
+                        <li>If color fails, make sure the target has a mesh component.</li>
+                        <li>If a behavior does nothing, make sure the behavior name matches exactly.</li>
+                    </ul>
+                    <div class="callout warning">
+                        Good debugging habit: change one thing, test it, then change the next thing.
+                    </div>
+                </section>
+
+                <section class="panel" id="practice">
+                    <h2>Practice Ideas</h2>
+                    <div class="cards">
+                        <div class="card">
+                            <h3>Practice 1</h3>
+                            <p class="small">Make a cube move upward and then rename it.</p>
+                        </div>
+                        <div class="card">
+                            <h3>Practice 2</h3>
+                            <p class="small">Make a sphere orange and slightly bigger.</p>
+                        </div>
+                        <div class="card">
+                            <h3>Practice 3</h3>
+                            <p class="small">Assign <span class="inline-code">SpinBehavior</span> to one object and compare it with a command script.</p>
+                        </div>
+                    </div>
+                    <p>
+                        If you want to improve quickly, repeat small experiments until you can predict what the script will do before you run it.
+                    </p>
+                </section>
+
+                <section class="panel" id="limits">
+                    <h2>Current Limits</h2>
+                    <div class="callout warning">
+                        The command script system is intentionally small. Unsupported commands produce a script error instead of trying to guess what you meant.
+                    </div>
+                    <ul>
+                        <li>Cropsy Studio uses C++20, but full C++20 support is not implemented yet. >> <a href="https://isocpp.org/">isocpp.org</a>. << </li>
+                        <li>No full custom scripting language.</li>
+                        <li>Behavior names are hand-written built-ins right now.</li>
+                        <li>Command scripts work best for simple scene edits and debug tasks.</li>
+                    </ul>
+                    <div class="callout danger">
+                        If you add a behavior name that does not exist, the engine safely ignores it. That is normal right now.
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+    <div id="functionPopup" class="function-popup" aria-hidden="true">
+        <div class="function-popup-header">
+            <div>
+                <h3 id="functionPopupTitle" class="function-popup-title">Function Details</h3>
+                <p id="functionPopupSubtitle" class="function-popup-subtitle"></p>
+            </div>
+            <button id="functionPopupClose" class="function-popup-close" type="button" aria-label="Close">X</button>
+        </div>
+        <div id="functionPopupBody" class="function-popup-body"></div>
+        <div class="resize-handle n" data-resize="n"></div>
+        <div class="resize-handle s" data-resize="s"></div>
+        <div class="resize-handle e" data-resize="e"></div>
+        <div class="resize-handle w" data-resize="w"></div>
+        <div class="resize-handle ne" data-resize="ne"></div>
+        <div class="resize-handle nw" data-resize="nw"></div>
+        <div class="resize-handle se" data-resize="se"></div>
+        <div class="resize-handle sw" data-resize="sw"></div>
+    </div>
+    <div id="hoverDocCard" class="hover-doc-card" aria-hidden="true">
+        <h4 id="hoverDocTitle"></h4>
+        <p id="hoverDocSummary"></p>
+        <span class="small-label">Useful Info</span>
+        <ul id="hoverDocUseful"></ul>
+        <span class="small-label">Example</span>
+        <div id="hoverDocExample"></div>
+    </div>
+    <script>
+        (function () {
+            const storageKey = "cropsy-docs-theme";
+            const body = document.body;
+            const toggle = document.getElementById("themeToggle");
+            const popup = document.getElementById("functionPopup");
+            const popupTitle = document.getElementById("functionPopupTitle");
+            const popupSubtitle = document.getElementById("functionPopupSubtitle");
+            const popupBody = document.getElementById("functionPopupBody");
+            const popupClose = document.getElementById("functionPopupClose");
+            const popupHeader = popup.querySelector(".function-popup-header");
+            const functionButtons = document.querySelectorAll(".function-button");
+            const resizeHandles = popup.querySelectorAll(".resize-handle");
+            const hoverDocCard = document.getElementById("hoverDocCard");
+            const hoverDocTitle = document.getElementById("hoverDocTitle");
+            const hoverDocSummary = document.getElementById("hoverDocSummary");
+            const hoverDocUseful = document.getElementById("hoverDocUseful");
+            const hoverDocExample = document.getElementById("hoverDocExample");
+            const hoverDocTriggers = document.querySelectorAll("[data-hover-doc]");
+
+            const functionDocs = {
+                FindChild: {
+                    signature: "EntityId FindChild(const std::string& name)",
+                    returns: "EntityId",
+                    summary: "Searches only the direct children of the current entity and returns the first child with the matching name.",
+                    useful: [
+                        "This does not search grandchildren.",
+                        "If nothing matches, it returns NullEntity.",
+                        "Useful when your behavior manages a small known object tree."
+                    ],
+                    example: "Scene::EntityId child = FindChild(\"Wheel\");"
+                },
+                IsEnabled: {
+                    signature: "bool IsEnabled()",
+                    returns: "bool",
+                    summary: "Checks whether the behavior component on the current entity is enabled.",
+                    useful: [
+                        "This checks the behavior component state, not every possible object state.",
+                        "Useful for early-out checks in OnUpdate."
+                    ],
+                    example: "if (!IsEnabled())\n{\n    return;\n}"
+                },
+                GetName: {
+                    signature: "std::string GetName()",
+                    returns: "string",
+                    summary: "Returns the current entity name.",
+                    useful: [
+                        "Good for logging and simple debugging output.",
+                        "Returns an empty string if the entity is invalid."
+                    ],
+                    example: "Print(\"Running on \" + GetName());"
+                },
+                GetPosition: {
+                    signature: "glm::vec3 GetPosition()",
+                    returns: "vec3",
+                    summary: "Gets the local position from the transform component.",
+                    useful: [
+                        "This is local position, not guaranteed world position.",
+                        "Use it when you want to read and then adjust movement."
+                    ],
+                    example: "glm::vec3 pos = GetPosition();\npos.y += 1.0f;"
+                },
+                GetRotation: {
+                    signature: "glm::vec3 GetRotation()",
+                    returns: "vec3",
+                    summary: "Gets the local Euler rotation in degrees.",
+                    useful: [
+                        "Rotation values are stored as Euler angles.",
+                        "Best for simple beginner-friendly rotations."
+                    ],
+                    example: "glm::vec3 rot = GetRotation();\nrot.y += 30.0f;"
+                },
+                GetScale: {
+                    signature: "glm::vec3 GetScale()",
+                    returns: "vec3",
+                    summary: "Gets the local scale from the transform component.",
+                    useful: [
+                        "Useful for pulsing or size-based effects.",
+                        "The engine clamps scale to avoid zero scale in setters."
+                    ],
+                    example: "glm::vec3 scale = GetScale();"
+                },
+                OnStart: {
+                    signature: "void OnStart()",
+                    returns: "void",
+                    summary: "Runs once when play mode starts and the behavior is created.",
+                    useful: [
+                        "Use this for setup work.",
+                        "Good place to log that a behavior started."
+                    ],
+                    example: "void OnStart() override\n{\n    Print(\"Behavior started\");\n}"
+                },
+                OnUpdate: {
+                    signature: "void OnUpdate(float deltaTime)",
+                    returns: "void",
+                    summary: "Runs every frame during play mode while the behavior is active.",
+                    useful: [
+                        "Use deltaTime for smooth motion.",
+                        "This is where most runtime behavior logic goes."
+                    ],
+                    example: "void OnUpdate(float deltaTime) override\n{\n    glm::vec3 pos = GetPosition();\n    pos.x += 2.0f * deltaTime;\n    SetPosition(pos);\n}"
+                },
+                SetName: {
+                    signature: "void SetName(const std::string& value)",
+                    returns: "void",
+                    summary: "Changes the entity name.",
+                    useful: [
+                        "Helpful for labeling runtime-spawned or stateful objects.",
+                        "Be careful if other code expects a specific name."
+                    ],
+                    example: "SetName(\"MovingPlatform\");"
+                },
+                SetPosition: {
+                    signature: "void SetPosition(const glm::vec3& value)",
+                    returns: "void",
+                    summary: "Writes a new local position to the transform.",
+                    useful: [
+                        "Use after reading the old position with GetPosition.",
+                        "This is the simplest way to move an object from behavior code."
+                    ],
+                    example: "glm::vec3 pos = GetPosition();\npos.y += 3.0f;\nSetPosition(pos);"
+                },
+                SetRotation: {
+                    signature: "void SetRotation(const glm::vec3& value)",
+                    returns: "void",
+                    summary: "Writes a new local Euler rotation.",
+                    useful: [
+                        "Useful for simple spin or turn behavior.",
+                        "Works well with small step changes every frame."
+                    ],
+                    example: "glm::vec3 rot = GetRotation();\nrot.y += 60.0f * deltaTime;\nSetRotation(rot);"
+                },
+                SetScale: {
+                    signature: "void SetScale(const glm::vec3& value)",
+                    returns: "void",
+                    summary: "Writes a new local scale value.",
+                    useful: [
+                        "Very small values are clamped by the engine.",
+                        "Good for pulse effects and simple size changes."
+                    ],
+                    example: "SetScale(glm::vec3(1.2f, 1.2f, 1.2f));"
+                },
+                SetEnabled: {
+                    signature: "void SetEnabled(bool enabled)",
+                    returns: "void",
+                    summary: "Enables or disables the current behavior component.",
+                    useful: [
+                        "Useful if a behavior should turn itself off after one action.",
+                        "Only affects the behavior component state."
+                    ],
+                    example: "SetEnabled(false);"
+                },
+                Print: {
+                    signature: "void Print(const std::string& message)",
+                    returns: "void",
+                    summary: "Writes an info message to the Cropsy console under the Behavior category.",
+                    useful: [
+                        "Great for debugging while learning.",
+                        "Use short messages so the console stays readable."
+                    ],
+                    example: "Print(\"Door opened\");"
+                }
+            };
+
+            const hoverDocs = {
+                "type-entityid": {
+                    title: "EntityId",
+                    summary: "This is the engine's internal handle for an object in the scene.",
+                    useful: [
+                        "You usually read this from engine APIs, not from command scripts.",
+                        "If nothing is found, the engine may use NullEntity instead."
+                    ],
+                    example: "EntityId child = FindChild(\"Wheel\");"
+                },
+                "type-string": {
+                    title: "string",
+                    summary: "A text value used for names, messages, and file-like identifiers.",
+                    useful: [
+                        "Command scripts often use plain text after commands like print or set_name.",
+                        "Behavior APIs often show this as std::string in C++ examples."
+                    ],
+                    example: "set_name Player"
+                },
+                "type-bool": {
+                    title: "bool",
+                    summary: "A true/false value.",
+                    useful: [
+                        "Useful for enabled states and simple checks.",
+                        "In examples you will usually see true or false written in lowercase."
+                    ],
+                    example: "SetEnabled(true);"
+                },
+                "type-vec4": {
+                    title: "vec4",
+                    summary: "Four numeric values, usually used for RGBA colors.",
+                    useful: [
+                        "The first three numbers are red, green, and blue.",
+                        "The fourth number is usually alpha, which means transparency or opacity."
+                    ],
+                    example: "set_color 1 0.4 0.2 1"
+                },
+                "type-vec3": {
+                    title: "vec3",
+                    summary: "Three numeric values, usually used as X Y Z.",
+                    useful: [
+                        "This is common for position, rotation, and scale.",
+                        "Command scripts write vec3 values as three separate numbers."
+                    ],
+                    example: "move 0 2 0"
+                },
+                "type-float": {
+                    title: "float",
+                    summary: "A single decimal number.",
+                    useful: [
+                        "Use this for movement speed, timing, and rotation amounts.",
+                        "Whole numbers also count as valid float input in most script commands."
+                    ],
+                    example: "rotation.y += 60.0f * deltaTime;"
+                },
+                "color-transform": {
+                    title: "Transform Command Color",
+                    summary: "This color means the token changes position, rotation, or scale.",
+                    useful: [
+                        "These are the most common scene-editing commands.",
+                        "They usually expect vec3-style numeric input."
+                    ],
+                    example: "move 0 2 0"
+                },
+                "color-output": {
+                    title: "Output Command Color",
+                    summary: "This color marks commands that write to the console.",
+                    useful: [
+                        "Use these for debugging and quick checks.",
+                        "They do not move or change objects directly."
+                    ],
+                    example: "print Hello from Cropsy"
+                },
+                "color-color": {
+                    title: "Color Command Color",
+                    summary: "This color marks commands that change mesh tint values.",
+                    useful: [
+                        "This usually expects RGB or RGBA-style values.",
+                        "It only works on objects that actually have mesh color data."
+                    ],
+                    example: "set_color 1 0.4 0.2 1"
+                },
+                "color-select": {
+                    title: "Selection Command Color",
+                    summary: "This color marks commands that choose the active object target.",
+                    useful: [
+                        "Most object-changing commands need a selected target first.",
+                        "Using selected keeps the current object instead of changing it by name."
+                    ],
+                    example: "select Cube"
+                },
+                "color-name": {
+                    title: "Name Command Color",
+                    summary: "This color marks commands that change object names.",
+                    useful: [
+                        "Renaming can affect later scripts that use select by name.",
+                        "Use exact names if another script needs to find the object later."
+                    ],
+                    example: "set_name Player"
+                },
+                "color-parameter": {
+                    title: "Parameter Color",
+                    summary: "This color marks exposed script slot parameters that start with $.",
+                    useful: [
+                        "Parameters let you reuse one script with different values.",
+                        "These come from the Inspector script slot, not from hardcoded engine globals."
+                    ],
+                    example: "$speed"
+                },
+                "color-entity": {
+                    title: "Entity Name Color",
+                    summary: "This color marks known scene object names inside script examples.",
+                    useful: [
+                        "This helps you visually separate object targets from commands.",
+                        "The name still has to match the hierarchy entry exactly."
+                    ],
+                    example: "select Cube"
+                },
+                "color-keyword": {
+                    title: "Keyword Color",
+                    summary: "This color marks built-in special words instead of ordinary object names.",
+                    useful: [
+                        "These are small built-in script words, not scene entities.",
+                        "selected is the most common one right now."
+                    ],
+                    example: "select selected"
+                },
+                "color-runtime": {
+                    title: "Runtime Token Color",
+                    summary: "This color marks tokens that only make sense during runtime updates.",
+                    useful: [
+                        "dt means delta time, which is the frame time.",
+                        "Use it in update scripts so movement stays frame-rate aware."
+                    ],
+                    example: "rotate 0 60 dt"
+                },
+                "color-bool": {
+                    title: "Boolean Color",
+                    summary: "This color marks true/false values in examples.",
+                    useful: [
+                        "These are usually used in behavior-style C++ examples.",
+                        "They help separate logical values from strings and numbers."
+                    ],
+                    example: "SetEnabled(true);"
+                },
+                "command-select": {
+                    title: "select",
+                    summary: "Selects the target object that later commands should act on.",
+                    useful: [
+                        "Use selected to keep the current object or the attached object.",
+                        "If the name is wrong, later commands may fail because nothing is selected."
+                    ],
+                    example: "select Cube"
+                },
+                "command-print": {
+                    title: "print",
+                    summary: "Writes a normal info message to the Cropsy console.",
+                    useful: [
+                        "Great for quick beginner debugging.",
+                        "Everything after the command is treated like the message text."
+                    ],
+                    example: "print Hello from Cropsy"
+                },
+                "command-warn": {
+                    title: "warn",
+                    summary: "Writes a warning message to the console.",
+                    useful: [
+                        "Use this when something is wrong but not fatal.",
+                        "It helps separate important notices from normal print output."
+                    ],
+                    example: "warn Missing part named Door"
+                },
+                "command-error": {
+                    title: "error",
+                    summary: "Writes an error message to the console.",
+                    useful: [
+                        "Use this for failures or bad script states.",
+                        "This reports an error without becoming a full engine crash."
+                    ],
+                    example: "error Could not find target object"
+                },
+                "command-set-position": {
+                    title: "set_position",
+                    summary: "Sets the selected object's position directly.",
+                    useful: [
+                        "This replaces the full position instead of adding to it.",
+                        "Use this when you want an exact location."
+                    ],
+                    example: "set_position 0 5 0"
+                },
+                "command-move": {
+                    title: "move",
+                    summary: "Adds an offset to the selected object's current position.",
+                    useful: [
+                        "Use this for relative movement.",
+                        "In update scripts, dt is useful for smooth movement over time."
+                    ],
+                    example: "move 0 dt 0"
+                },
+                "command-set-rotation": {
+                    title: "set_rotation",
+                    summary: "Sets the selected object's Euler rotation directly.",
+                    useful: [
+                        "This replaces the full rotation values.",
+                        "Good for exact orientation setup."
+                    ],
+                    example: "set_rotation 0 90 0"
+                },
+                "command-rotate": {
+                    title: "rotate",
+                    summary: "Adds Euler rotation to the current object rotation.",
+                    useful: [
+                        "Best for simple spinning or turning behavior.",
+                        "In update mode, combine this with dt for smoother motion."
+                    ],
+                    example: "rotate 0 60 dt"
+                },
+                "command-set-scale": {
+                    title: "set_scale",
+                    summary: "Sets the selected object's scale directly.",
+                    useful: [
+                        "Use this for exact scale values.",
+                        "The engine clamps scale so it does not become zero."
+                    ],
+                    example: "set_scale 2 2 2"
+                },
+                "command-scale": {
+                    title: "scale",
+                    summary: "Multiplies the selected object's current scale.",
+                    useful: [
+                        "This is a relative scale change instead of a full replacement.",
+                        "Useful for pulse-style effects."
+                    ],
+                    example: "scale 1.1 1.1 1.1"
+                },
+                "command-set-color": {
+                    title: "set_color",
+                    summary: "Changes the selected mesh object's tint color.",
+                    useful: [
+                        "Use RGB or RGBA style values in the 0..1 range.",
+                        "This only works on objects with a mesh color to change."
+                    ],
+                    example: "set_color 1 0.4 0.2 1"
+                },
+                "command-set-name": {
+                    title: "set_name",
+                    summary: "Changes the selected object's name.",
+                    useful: [
+                        "Renaming affects future select-by-name commands.",
+                        "Treat object names like identifiers if you script against them a lot."
+                    ],
+                    example: "set_name Player"
+                }
+            };
+
+            const typeDefinitions = [
+                { token: "Scene::EntityId", className: "type-id" },
+                { token: "EntityId", className: "type-id" },
+                { token: "NullEntity", className: "type-id" },
+                { token: "std::string", className: "type-string" },
+                { token: "string", className: "type-string" },
+                { token: "glm::vec4", className: "type-vec" },
+                { token: "glm::vec3", className: "type-vec" },
+                { token: "glm::vec2", className: "type-vec" },
+                { token: "vec4", className: "type-vec" },
+                { token: "vec3", className: "type-vec" },
+                { token: "vec2", className: "type-vec" },
+                { token: "float", className: "type-float" },
+                { token: "bool", className: "type-bool" },
+                { token: "uint64_t", className: "type-int" },
+                { token: "int", className: "type-int" },
+                { token: "void", className: "type-void" }
+            ];
+            const outputCommands = new Set(["print", "warn", "error"]);
+            const selectCommands = new Set(["select"]);
+            const nameCommands = new Set(["set_name"]);
+            const transformCommands = new Set(["set_position", "move", "set_rotation", "rotate", "set_scale", "scale"]);
+            const colorCommands = new Set(["set_color"]);
+
+            function escapeHtml(value) {
+                return value
+                    .replace(/&/g, "&amp;")
+                    .replace(/</g, "&lt;")
+                    .replace(/>/g, "&gt;")
+                    .replace(/"/g, "&quot;")
+                    .replace(/'/g, "&#39;");
+            }
+
+            function escapeRegex(value) {
+                return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+            }
+
+            function highlightTypeMarkup(value) {
+                let html = escapeHtml(value);
+                typeDefinitions.forEach(function (definition) {
+                    const pattern = new RegExp("(^|[^\\w:])(" + escapeRegex(definition.token) + ")(?=[^\\w:]|$)", "g");
+                    html = html.replace(pattern, function (_, prefix, token) {
+                        return prefix + '<span class="type-token ' + definition.className + '">' + token + "</span>";
+                    });
+                });
+                return html;
+            }
+
+            const typeDefinitionMap = new Map(typeDefinitions.map(function (definition) {
+                return [definition.token, definition.className];
+            }));
+            const docKeywordTokens = new Set(["class", "public", "private", "protected", "return", "if", "else", "const", "override", "nullptr"]);
+
+            function highlightApiExampleMarkup(value) {
+                let html = "";
+
+                function readString(source, startIndex) {
+                    let index = startIndex + 1;
+                    while (index < source.length) {
+                        if (source[index] === "\\" && index + 1 < source.length) {
+                            index += 2;
+                            continue;
+                        }
+                        if (source[index] === "\"") {
+                            ++index;
+                            break;
+                        }
+                        ++index;
+                    }
+                    return { token: source.slice(startIndex, index), nextIndex: index };
+                }
+
+                function readNumber(source, startIndex) {
+                    let index = startIndex;
+                    if (source[index] === "-") {
+                        ++index;
+                    }
+                    while (index < source.length && /[0-9]/.test(source[index])) {
+                        ++index;
+                    }
+                    if (index < source.length && source[index] === ".") {
+                        ++index;
+                        while (index < source.length && /[0-9]/.test(source[index])) {
+                            ++index;
+                        }
+                    }
+                    if (index < source.length && source[index] === "f") {
+                        ++index;
+                    }
+                    return { token: source.slice(startIndex, index), nextIndex: index };
+                }
+
+                function readIdentifier(source, startIndex) {
+                    let index = startIndex;
+                    while (index < source.length) {
+                        const char = source[index];
+                        const nextChar = source[index + 1];
+                        if (/[A-Za-z0-9_]/.test(char)) {
+                            ++index;
+                            continue;
+                        }
+                        if (char === ":" && nextChar === ":") {
+                            index += 2;
+                            continue;
+                        }
+                        break;
+                    }
+                    return { token: source.slice(startIndex, index), nextIndex: index };
+                }
+
+                for (let index = 0; index < value.length;) {
+                    const char = value[index];
+
+                    if (char === "\"") {
+                        const result = readString(value, index);
+                        html += '<span class="script-string">' + escapeHtml(result.token) + "</span>";
+                        index = result.nextIndex;
+                        continue;
+                    }
+
+                    if (char === "-" && index + 1 < value.length && /[0-9]/.test(value[index + 1])) {
+                        const result = readNumber(value, index);
+                        html += '<span class="script-number">' + escapeHtml(result.token) + "</span>";
+                        index = result.nextIndex;
+                        continue;
+                    }
+
+                    if (/[0-9]/.test(char)) {
+                        const result = readNumber(value, index);
+                        html += '<span class="script-number">' + escapeHtml(result.token) + "</span>";
+                        index = result.nextIndex;
+                        continue;
+                    }
+
+                    if (/[A-Za-z_]/.test(char)) {
+                        const result = readIdentifier(value, index);
+                        const token = result.token;
+                        let probeIndex = result.nextIndex;
+                        while (probeIndex < value.length && /\s/.test(value[probeIndex])) {
+                            ++probeIndex;
+                        }
+
+                        if (typeDefinitionMap.has(token)) {
+                            html += '<span class="type-token ' + typeDefinitionMap.get(token) + '">' + escapeHtml(token) + "</span>";
+                        }
+                        else if (token === "true" || token === "false") {
+                            html += '<span class="type-token type-bool">' + token + "</span>";
+                        }
+                        else if (docKeywordTokens.has(token)) {
+                            html += '<span class="doc-keyword">' + escapeHtml(token) + "</span>";
+                        }
+                        else if (probeIndex < value.length && value[probeIndex] === "(") {
+                            html += '<span class="doc-function">' + escapeHtml(token) + "</span>";
+                        }
+                        else if (probeIndex < value.length && value[probeIndex] === ".") {
+                            html += '<span class="doc-member">' + escapeHtml(token) + "</span>";
+                        }
+                        else {
+                            html += escapeHtml(token);
+                        }
+
+                        index = result.nextIndex;
+                        continue;
+                    }
+
+                    html += escapeHtml(char);
+                    ++index;
+                }
+
+                return html;
+            }
+
+            function formatDocExampleMarkup(value) {
+                return isCommandScriptSnippet(value)
+                    ? highlightCommandScriptMarkup(value)
+                    : highlightApiExampleMarkup(value);
+            }
+
+            function isCommandScriptSnippet(value) {
+                const trimmed = value.trim();
+                if (!trimmed) {
+                    return false;
+                }
+
+                if (trimmed.includes("class ") || trimmed.includes("override") || trimmed.includes("public:") || trimmed.includes("glm::")) {
+                    return false;
+                }
+
+                return /^(#|\s*(select|print|warn|error|set_position|move|set_rotation|rotate|set_scale|scale|set_color|set_name)\b)/m.test(trimmed);
+            }
+
+            function classifyCommand(command) {
+                if (outputCommands.has(command)) {
+                    return "command-string";
+                }
+                if (selectCommands.has(command)) {
+                    return "command-select";
+                }
+                if (nameCommands.has(command)) {
+                    return "command-name";
+                }
+                if (transformCommands.has(command)) {
+                    return "command-transform";
+                }
+                if (colorCommands.has(command)) {
+                    return "command-color";
+                }
+                return "command-generic";
+            }
+
+            function isKnownCommand(token) {
+                return outputCommands.has(token) || selectCommands.has(token) || nameCommands.has(token) || transformCommands.has(token) || colorCommands.has(token);
+            }
+
+            function highlightCommandArguments(argumentText) {
+                return escapeHtml(argumentText)
+                    .replace(/\$[A-Za-z_][A-Za-z0-9_]*/g, function (value) {
+                        return '<span class="script-parameter">' + value + "</span>";
+                    })
+                    .replace(/\bselected\b/g, function (value) {
+                        return '<span class="script-keyword">' + value + "</span>";
+                    })
+                    .replace(/\bdt\b/g, function (value) {
+                        return '<span class="script-runtime">' + value + "</span>";
+                    })
+                    .replace(/-?\d+(?:\.\d+)?/g, function (value) {
+                    return '<span class="script-number">' + value + "</span>";
+                    })
+                    .replace(/\b(true|false)\b/g, function (value) {
+                        return '<span class="type-token type-bool">' + value + "</span>";
+                    });
+            }
+
+            function highlightSelectArguments(argumentText) {
+                return argumentText.split(/(\s+)/).map(function (part) {
+                    if (part.trim().length === 0) {
+                        return escapeHtml(part);
+                    }
+                    if (/^\$[A-Za-z_][A-Za-z0-9_]*$/.test(part)) {
+                        return '<span class="script-parameter">' + escapeHtml(part) + "</span>";
+                    }
+                    if (part === "selected") {
+                        return '<span class="script-keyword">' + part + "</span>";
+                    }
+                    return '<span class="script-entity">' + escapeHtml(part) + "</span>";
+                }).join("");
+            }
+
+            function highlightCommandScriptMarkup(value) {
+                return value.split("\n").map(function (rawLine) {
+                    if (rawLine.trim().length === 0) {
+                        return "";
+                    }
+
+                    const escapedLine = escapeHtml(rawLine);
+                    const trimmed = rawLine.trimStart();
+                    const indentLength = rawLine.length - trimmed.length;
+                    const indent = escapedLine.slice(0, indentLength);
+
+                    if (trimmed.startsWith("#")) {
+                        return indent + '<span class="script-comment">' + escapeHtml(trimmed) + "</span>";
+                    }
+
+                    const firstSpace = trimmed.indexOf(" ");
+                    const command = firstSpace >= 0 ? trimmed.slice(0, firstSpace) : trimmed;
+                    const rest = firstSpace >= 0 ? trimmed.slice(firstSpace + 1) : "";
+                    const commandClass = classifyCommand(command);
+                    let argumentMarkup = highlightCommandArguments(rest);
+
+                    if (outputCommands.has(command) && rest.length > 0) {
+                        argumentMarkup = '<span class="script-string">' + escapeHtml(rest) + "</span>";
+                    }
+                    else if (selectCommands.has(command) && rest.length > 0) {
+                        argumentMarkup = highlightSelectArguments(rest);
+                    }
+                    else if (nameCommands.has(command) && rest.length > 0) {
+                        argumentMarkup = '<span class="script-string">' + escapeHtml(rest) + "</span>";
+                    }
+
+                    return indent
+                        + '<span class="script-command ' + commandClass + '">' + escapeHtml(command) + "</span>"
+                        + (rest.length > 0 ? " " + argumentMarkup : "");
+                }).join("\n");
+            }
+
+            function applyTypeHighlightingToStaticCode() {
+                document.querySelectorAll("pre code").forEach(function (element) {
+                    const source = element.textContent;
+                    element.innerHTML = isCommandScriptSnippet(source)
+                        ? highlightCommandScriptMarkup(source)
+                        : highlightTypeMarkup(source);
+                });
+
+                document.querySelectorAll(".inline-code").forEach(function (element) {
+                    const text = element.textContent;
+                    element.innerHTML = /^(float|vec2|vec3|vec4|bool|string|EntityId|Scene::EntityId|int|uint64_t|void)$/.test(text)
+                        ? highlightTypeMarkup(text)
+                        : escapeHtml(text);
+                });
+
+                document.querySelectorAll("code").forEach(function (element) {
+                    if (element.closest("pre") || element.classList.contains("inline-code")) {
+                        return;
+                    }
+
+                    const text = element.textContent.trim();
+                    if (/^(float|vec2|vec3|vec4|bool|string|EntityId|Scene::EntityId|int|uint64_t|void)$/.test(text)) {
+                        element.innerHTML = highlightTypeMarkup(text);
+                        return;
+                    }
+
+                    if (isKnownCommand(text)) {
+                        element.innerHTML = '<span class="script-command ' + classifyCommand(text) + '">' + escapeHtml(text) + "</span>";
+                    }
+                });
+            }
+
+            function applyTheme(theme) {
+                body.setAttribute("data-theme", theme);
+                toggle.textContent = theme === "dark" ? "Light Mode" : "Dark Mode";
+            }
+
+            function openFunctionPopup(functionName) {
+                const doc = functionDocs[functionName];
+                if (!doc) {
+                    return;
+                }
+
+                popupTitle.innerHTML = functionName + ' <span class="popup-type-note">(type: ' + highlightApiExampleMarkup(doc.returns) + ")</span>";
+                popupSubtitle.innerHTML = highlightApiExampleMarkup(doc.signature);
+                popupBody.innerHTML = `
+                    <div class="function-meta">
+                        <div><strong>Return Type:</strong> ${highlightApiExampleMarkup(doc.returns)}</div>
+                    </div>
+                    <h4>What it is</h4>
+                    <p>${doc.summary}</p>
+                    <h4>Useful info</h4>
+                    <ul>${doc.useful.map(item => `<li>${item}</li>`).join("")}</ul>
+                    <div class="function-example">
+                        <h4>Example</h4>
+                        <pre><code>${formatDocExampleMarkup(doc.example)}</code></pre>
+                    </div>
+                `;
+                popup.classList.add("open");
+                popup.setAttribute("aria-hidden", "false");
+            }
+
+            function closeFunctionPopup() {
+                popup.classList.remove("open");
+                popup.setAttribute("aria-hidden", "true");
+            }
+
+            function openHoverDoc(docId, mouseX, mouseY) {
+                const doc = hoverDocs[docId];
+                if (!doc) {
+                    return;
+                }
+
+                hoverDocTitle.textContent = doc.title;
+                hoverDocSummary.textContent = doc.summary;
+                hoverDocUseful.innerHTML = doc.useful.map(item => `<li>${item}</li>`).join("");
+                hoverDocExample.innerHTML = `<pre><code>${formatDocExampleMarkup(doc.example)}</code></pre>`;
+
+                const cardWidth = Math.min(380, window.innerWidth - 24);
+                const left = Math.min(window.innerWidth - cardWidth - 12, mouseX + 16);
+                const top = Math.min(window.innerHeight - 240, mouseY + 16);
+                hoverDocCard.style.left = Math.max(12, left) + "px";
+                hoverDocCard.style.top = Math.max(12, top) + "px";
+                hoverDocCard.classList.add("open");
+                hoverDocCard.setAttribute("aria-hidden", "false");
+            }
+
+            function closeHoverDoc() {
+                hoverDocCard.classList.remove("open");
+                hoverDocCard.setAttribute("aria-hidden", "true");
+            }
+
+            const savedTheme = localStorage.getItem(storageKey);
+            applyTheme(savedTheme === "dark" ? "dark" : "light");
+            applyTypeHighlightingToStaticCode();
+
+            toggle.addEventListener("click", function () {
+                const nextTheme = body.getAttribute("data-theme") === "dark" ? "light" : "dark";
+                applyTheme(nextTheme);
+                localStorage.setItem(storageKey, nextTheme);
+            });
+
+            functionButtons.forEach(function (button) {
+                button.addEventListener("click", function () {
+                    openFunctionPopup(button.getAttribute("data-function"));
+                });
+            });
+
+            hoverDocTriggers.forEach(function (trigger) {
+                trigger.addEventListener("mouseenter", function (event) {
+                    openHoverDoc(trigger.getAttribute("data-hover-doc"), event.clientX, event.clientY);
+                });
+                trigger.addEventListener("mousemove", function (event) {
+                    if (hoverDocCard.classList.contains("open")) {
+                        openHoverDoc(trigger.getAttribute("data-hover-doc"), event.clientX, event.clientY);
+                    }
+                });
+                trigger.addEventListener("mouseleave", closeHoverDoc);
+            });
+
+            popupClose.addEventListener("click", closeFunctionPopup);
+
+            let dragState = null;
+
+            popupHeader.addEventListener("mousedown", function (event) {
+                if (event.target === popupClose) {
+                    return;
+                }
+
+                const rect = popup.getBoundingClientRect();
+                dragState = {
+                    mode: "drag",
+                    startX: event.clientX,
+                    startY: event.clientY,
+                    left: rect.left,
+                    top: rect.top
+                };
+
+                popup.style.right = "auto";
+                popup.style.bottom = "auto";
+                popup.style.left = rect.left + "px";
+                popup.style.top = rect.top + "px";
+                event.preventDefault();
+            });
+
+            resizeHandles.forEach(function (handle) {
+                handle.addEventListener("mousedown", function (event) {
+                    const rect = popup.getBoundingClientRect();
+                    dragState = {
+                        mode: "resize",
+                        direction: handle.getAttribute("data-resize"),
+                        startX: event.clientX,
+                        startY: event.clientY,
+                        left: rect.left,
+                        top: rect.top,
+                        width: rect.width,
+                        height: rect.height
+                    };
+
+                    popup.style.right = "auto";
+                    popup.style.bottom = "auto";
+                    popup.style.left = rect.left + "px";
+                    popup.style.top = rect.top + "px";
+                    popup.style.width = rect.width + "px";
+                    popup.style.height = rect.height + "px";
+                    event.preventDefault();
+                    event.stopPropagation();
+                });
+            });
+
+            window.addEventListener("mousemove", function (event) {
+                if (!dragState) {
+                    return;
+                }
+
+                if (dragState.mode === "drag") {
+                    const nextLeft = dragState.left + (event.clientX - dragState.startX);
+                    const nextTop = dragState.top + (event.clientY - dragState.startY);
+                    popup.style.left = Math.max(8, nextLeft) + "px";
+                    popup.style.top = Math.max(8, nextTop) + "px";
+                    return;
+                }
+
+                const minWidth = 280;
+                const minHeight = 200;
+                let nextLeft = dragState.left;
+                let nextTop = dragState.top;
+                let nextWidth = dragState.width;
+                let nextHeight = dragState.height;
+                const dx = event.clientX - dragState.startX;
+                const dy = event.clientY - dragState.startY;
+                const direction = dragState.direction;
+
+                if (direction.includes("e")) {
+                    nextWidth = Math.max(minWidth, dragState.width + dx);
+                }
+                if (direction.includes("s")) {
+                    nextHeight = Math.max(minHeight, dragState.height + dy);
+                }
+                if (direction.includes("w")) {
+                    nextWidth = Math.max(minWidth, dragState.width - dx);
+                    nextLeft = dragState.left + (dragState.width - nextWidth);
+                }
+                if (direction.includes("n")) {
+                    nextHeight = Math.max(minHeight, dragState.height - dy);
+                    nextTop = dragState.top + (dragState.height - nextHeight);
+                }
+
+                popup.style.left = Math.max(8, nextLeft) + "px";
+                popup.style.top = Math.max(8, nextTop) + "px";
+                popup.style.width = nextWidth + "px";
+                popup.style.height = nextHeight + "px";
+            });
+
+            window.addEventListener("mouseup", function () {
+                dragState = null;
+            });
+        })();
+    </script>
+</body>
+</html>
